@@ -1,0 +1,71 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
+}
+
+repositories {
+    maven {
+        name "CB's Maven"
+        url "http://chickenbones.net/maven"
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "0.0.1"
+group= "void.lib" 
+archivesBaseName = "VoidLib-[1.10.2]"
+
+sourceCompatibility = targetCompatibility = "1.8" 
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.8"
+}
+
+minecraft {
+    version = "1.10.2-12.18.3.2221"
+    runDir = "run"
+    mappings = "snapshot_20161111"
+}
+
+dependencies {
+    deobfCompile "codechicken:CodeChickenLib:1.10.2-2.5.4.218:deobf"
+}
+
+processResources
+{
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+jar {
+    classifier = 'universal'
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+task srcJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives deobfJar
+    archives srcJar
+}
