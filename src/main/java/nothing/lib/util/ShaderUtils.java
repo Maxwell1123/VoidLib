@@ -1,4 +1,4 @@
-package nothing.lib.internal.util;
+package nothing.lib.util;
 
 import codechicken.lib.render.shader.ShaderProgram;
 import net.minecraft.util.ResourceLocation;

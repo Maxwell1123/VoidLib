@@ -1,4 +1,4 @@
-package nothing.lib.internal.util;
+package nothing.lib.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;

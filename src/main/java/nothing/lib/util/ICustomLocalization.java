@@ -1,4 +1,4 @@
-package nothing.lib.internal.util;
+package nothing.lib.util;
 
 public interface ICustomLocalization {
 

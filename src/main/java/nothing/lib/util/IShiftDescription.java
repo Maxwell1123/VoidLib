@@ -1,4 +1,4 @@
-package nothing.lib.internal.util;
+package nothing.lib.util;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

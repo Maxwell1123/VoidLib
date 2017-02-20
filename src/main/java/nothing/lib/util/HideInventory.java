@@ -1,4 +1,4 @@
-package nothing.lib.internal.util;
+package nothing.lib.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

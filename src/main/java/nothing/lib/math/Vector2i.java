@@ -1,4 +1,4 @@
-package nothing.lib.internal.math;
+package nothing.lib.math;
 
 public class Vector2i {
 
