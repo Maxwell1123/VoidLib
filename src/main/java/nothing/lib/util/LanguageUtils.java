@@ -11,7 +11,7 @@ public class LanguageUtils {
     public static final String KEY_CTRL = TextFormatting.GREEN + format("misc", "ctrl") + TextFormatting.GRAY;
     public static final String KEY_ALT = TextFormatting.RED + format("misc", "alt") + TextFormatting.GRAY;
 
-    public static String format(String prefix, String toFormat){
+    public static String format(String prefix, String toFormat) {
         return I18n.format(prefix + ".commons." + toFormat + ".name");
     }
 

@@ -20,13 +20,13 @@ public class SimpleBakedModel implements IBakedModel {
     private boolean ambientOcclusion;
     private TextureAtlasSprite particleTexture;
 
-    public SimpleBakedModel(List<BakedQuad> quads){
+    public SimpleBakedModel(List<BakedQuad> quads) {
         this.quads = quads;
         this.ambientOcclusion = false;
         this.particleTexture = null;
     }
 
-    public SimpleBakedModel(List<BakedQuad> quads, boolean ambientOcclusion, TextureAtlasSprite particleTexture){
+    public SimpleBakedModel(List<BakedQuad> quads, boolean ambientOcclusion, TextureAtlasSprite particleTexture) {
         this.quads = quads;
         this.ambientOcclusion = ambientOcclusion;
         this.particleTexture = particleTexture;

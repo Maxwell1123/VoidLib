@@ -33,17 +33,17 @@ public class DefaultItemRenderer implements IItemRenderingHandler, IItemQuadProv
     }
 
     @Override
-    public List<BakedQuad> getQuads(ItemStack stack, long random){
+    public List<BakedQuad> getQuads(ItemStack stack, long random) {
         Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
             public TextureAtlasSprite apply(ResourceLocation input) {
                 return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(input.toString());
             }
         };
 
-        TextureAtlasSprite texture = ((IIconItem)stack.getItem()).getIcon(stack.getMetadata());
+        TextureAtlasSprite texture = ((IIconItem) stack.getItem()).getIcon(stack.getMetadata());
         IBakedModel layerModel = (new ItemLayerModel(ImmutableList.of(new ResourceLocation(texture.getIconName())))).bake(TransformUtils.DEFAULT_ITEM, DefaultVertexFormats.ITEM, bakedTextureGetter);
         ImmutableList.Builder quadBuilder = ImmutableList.builder();
-        quadBuilder.addAll(layerModel.getQuads((IBlockState)null, (EnumFacing)null, 0L));
+        quadBuilder.addAll(layerModel.getQuads((IBlockState) null, (EnumFacing) null, 0L));
         return quadBuilder.build();
     }
 

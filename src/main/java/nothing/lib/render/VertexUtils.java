@@ -12,24 +12,21 @@ public class VertexUtils {
 
     private static final VertexFormat itemFormatWithLightMap = new VertexFormat(DefaultVertexFormats.ITEM).addElement(DefaultVertexFormats.TEX_2S);
 
-    public static VertexFormat getFormatWithLightMap(VertexFormat format){
-        if(FMLClientHandler.instance().hasOptifine() || !ForgeModContainer.forgeLightPipelineEnabled){
+    public static VertexFormat getFormatWithLightMap(VertexFormat format) {
+        if (FMLClientHandler.instance().hasOptifine() || !ForgeModContainer.forgeLightPipelineEnabled) {
             return format;
         }
 
         VertexFormat result;
 
-        if(format == DefaultVertexFormats.BLOCK){
+        if (format == DefaultVertexFormats.BLOCK) {
             result = DefaultVertexFormats.BLOCK;
-        }
-        else if(format == DefaultVertexFormats.ITEM){
+        } else if (format == DefaultVertexFormats.ITEM) {
             result = itemFormatWithLightMap;
-        }
-        else if(!format.hasUvOffset(1)){
-            result = new VertexFormat( format );
+        } else if (!format.hasUvOffset(1)) {
+            result = new VertexFormat(format);
             result.addElement(DefaultVertexFormats.TEX_2S);
-        }
-        else{
+        } else {
             result = format;
         }
 

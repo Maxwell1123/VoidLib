@@ -37,19 +37,19 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
     private Random random = new Random();
     private Map<String, SimpleBakedModel> modelCache = Maps.newHashMap();
 
-    public CustomItemRenderer(IBlockRenderingHandler renderer){
+    public CustomItemRenderer(IBlockRenderingHandler renderer) {
         this.blockRenderer = renderer;
     }
 
-    public CustomItemRenderer(IItemRenderingHandler renderer){
+    public CustomItemRenderer(IItemRenderingHandler renderer) {
         this.itemRenderer = renderer;
     }
 
     @Override
-    public void renderItem(ItemStack stack){
-        if(this.itemRenderer != null){
-            if(this.itemRenderer.useRenderCache()){
-                if(!(this.modelCache.containsKey(this.getCacheKey(stack)))){
+    public void renderItem(ItemStack stack) {
+        if (this.itemRenderer != null) {
+            if (this.itemRenderer.useRenderCache()) {
+                if (!(this.modelCache.containsKey(this.getCacheKey(stack)))) {
                     BakingVertexBuffer buffer = BakingVertexBuffer.create();
                     buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                     CCRenderState renderState = CCRenderState.instance();
@@ -60,34 +60,38 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     List<BakedQuad> quads = Lists.newArrayList();
                     quads.addAll(buffer.bake());
 
-                    if(this.itemRenderer instanceof IItemQuadProvider){
-                        IItemQuadProvider provider = (IItemQuadProvider)this.itemRenderer;
+                    if (this.itemRenderer instanceof IItemQuadProvider) {
+                        IItemQuadProvider provider = (IItemQuadProvider) this.itemRenderer;
                         quads.addAll(provider.getQuads(stack, this.random.nextLong()));
                     }
 
                     SimpleBakedModel model = new SimpleBakedModel(quads);
                     this.modelCache.put(this.getCacheKey(stack), model);
-                }
-                else{
+                } else {
                     RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
                     SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
                     GlStateManager.pushAttrib();
                     GlStateManager.pushMatrix();
                     GlStateManager.enableBlend();
                     GlStateManager.translate(0.5D, 0.5D, 0.5D);
-                    if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.enableStandardItemLighting(); }
+                    if (this.itemRenderer.useStandardItemLighting()) {
+                        RenderHelper.enableStandardItemLighting();
+                    }
                     renderItem.renderItem(stack, model);
-                    if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.disableStandardItemLighting(); }
+                    if (this.itemRenderer.useStandardItemLighting()) {
+                        RenderHelper.disableStandardItemLighting();
+                    }
                     GlStateManager.disableBlend();
                     GlStateManager.popAttrib();
                     GlStateManager.popMatrix();
                 }
-            }
-            else{
+            } else {
                 GlStateManager.pushMatrix();
                 GlStateManager.pushAttrib();
                 GlStateManager.enableBlend();
-                if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.enableStandardItemLighting(); }
+                if (this.itemRenderer.useStandardItemLighting()) {
+                    RenderHelper.enableStandardItemLighting();
+                }
                 VertexBuffer buffer = Tessellator.getInstance().getBuffer();
                 buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                 CCRenderState renderState = CCRenderState.instance();
@@ -95,14 +99,15 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 renderState.bind(buffer);
                 this.itemRenderer.renderItem(renderState, stack, this.random.nextLong());
                 Tessellator.getInstance().draw();
-                if(this.itemRenderer.useStandardItemLighting()){ RenderHelper.disableStandardItemLighting(); }
+                if (this.itemRenderer.useStandardItemLighting()) {
+                    RenderHelper.disableStandardItemLighting();
+                }
                 GlStateManager.disableBlend();
                 GlStateManager.popAttrib();
                 GlStateManager.popMatrix();
             }
-        }
-        else{
-            if(this.blockRenderer.hasDynamicItemRendering()){
+        } else {
+            if (this.blockRenderer.hasDynamicItemRendering()) {
                 GlStateManager.pushMatrix();
                 GlStateManager.pushAttrib();
                 GlStateManager.enableBlend();
@@ -118,9 +123,8 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                 GlStateManager.disableBlend();
                 GlStateManager.popAttrib();
                 GlStateManager.popMatrix();
-            }
-            else{
-                if(!(this.modelCache.containsKey(this.getCacheKey(stack)))){
+            } else {
+                if (!(this.modelCache.containsKey(this.getCacheKey(stack)))) {
                     BakingVertexBuffer buffer = BakingVertexBuffer.create();
                     buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
                     CCRenderState renderState = CCRenderState.instance();
@@ -131,15 +135,14 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
                     List<BakedQuad> quads = Lists.newArrayList();
                     quads.addAll(buffer.bake());
 
-                    if(this.itemRenderer instanceof IItemQuadProvider){
-                        IItemQuadProvider provider = (IItemQuadProvider)this.itemRenderer;
+                    if (this.itemRenderer instanceof IItemQuadProvider) {
+                        IItemQuadProvider provider = (IItemQuadProvider) this.itemRenderer;
                         quads.addAll(provider.getQuads(stack, this.random.nextLong()));
                     }
 
                     SimpleBakedModel model = new SimpleBakedModel(quads);
                     this.modelCache.put(this.getCacheKey(stack), model);
-                }
-                else{
+                } else {
                     RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
                     SimpleBakedModel model = this.modelCache.get(this.getCacheKey(stack));
                     GlStateManager.pushAttrib();
@@ -159,15 +162,14 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
 
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
-        if(this.itemRenderer != null){
+        if (this.itemRenderer != null) {
             return this.itemRenderer.handlePerspective(this, cameraTransformType);
-        }
-        else{
+        } else {
             return MapWrapper.handlePerspective(this, TransformUtils.DEFAULT_BLOCK.getTransforms(), cameraTransformType);
         }
     }
 
-    private String getCacheKey(ItemStack stack){
+    private String getCacheKey(ItemStack stack) {
         StringBuilder builder = new StringBuilder();
         builder.append(stack.getItem().getRegistryName().getResourceDomain());
         builder.append('.');
@@ -175,13 +177,13 @@ public class CustomItemRenderer implements IItemRenderer, IPerspectiveAwareModel
         builder.append(':');
         builder.append(stack.getMetadata());
 
-        if(this.blockRenderer != null && this.blockRenderer instanceof IItemKeyProvider){
-            IItemKeyProvider provider = (IItemKeyProvider)this.blockRenderer;
+        if (this.blockRenderer != null && this.blockRenderer instanceof IItemKeyProvider) {
+            IItemKeyProvider provider = (IItemKeyProvider) this.blockRenderer;
             builder.append(':');
             provider.getExtendedItemKey(stack);
         }
-        if(this.itemRenderer != null && this.itemRenderer instanceof IItemKeyProvider){
-            IItemKeyProvider provider = (IItemKeyProvider)this.itemRenderer;
+        if (this.itemRenderer != null && this.itemRenderer instanceof IItemKeyProvider) {
+            IItemKeyProvider provider = (IItemKeyProvider) this.itemRenderer;
             builder.append(':');
             provider.getExtendedItemKey(stack);
         }

@@ -56,11 +56,11 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         this.setUnlocalizedName(modid + "." + blockName);
         this.setCreativeTab(this.getCreativeTab());
 
-        if(super.getClass().isAnnotationPresent(HideInventory.class)){
+        if (super.getClass().isAnnotationPresent(HideInventory.class)) {
             HideInventory annotation = super.getClass().getAnnotation(HideInventory.class);
 
-            if(!annotation.onlySubtypes()){
-                this.setCreativeTab((CreativeTabs)null);
+            if (!annotation.onlySubtypes()) {
+                this.setCreativeTab((CreativeTabs) null);
             }
         }
 
@@ -77,11 +77,11 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         this.setUnlocalizedName(modid + "." + blockName);
         this.setCreativeTab(this.getCreativeTab());
 
-        if(super.getClass().isAnnotationPresent(HideInventory.class)){
+        if (super.getClass().isAnnotationPresent(HideInventory.class)) {
             HideInventory annotation = super.getClass().getAnnotation(HideInventory.class);
 
-            if(!annotation.onlySubtypes()){
-                this.setCreativeTab((CreativeTabs)null);
+            if (!annotation.onlySubtypes()) {
+                this.setCreativeTab((CreativeTabs) null);
             }
         }
 
@@ -97,10 +97,9 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     public int damageDropped(IBlockState state) {
-        if(this instanceof IMetaBlock){
+        if (this instanceof IMetaBlock) {
             return this.getMetaFromState(state);
-        }
-        else{
+        } else {
             return super.damageDropped(state);
         }
     }
@@ -108,28 +107,25 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        if(this instanceof IMetaBlock){
+        if (this instanceof IMetaBlock) {
             IMetaBlock iface = (IMetaBlock)this;
 
-            if(super.getClass().isAnnotationPresent(HideInventory.class)){
+            if (super.getClass().isAnnotationPresent(HideInventory.class)) {
                 HideInventory annotation = super.getClass().getAnnotation(HideInventory.class);
 
-                if(annotation.onlySubtypes()){
+                if (annotation.onlySubtypes()) {
                     list.add(new ItemStack(item, 1, 0));
-                }
-                else{
-                    for(int i = 0; i < iface.getSubNames().length; i++){
+                } else {
+                    for (int i = 0; i < iface.getSubNames().length; i++) {
                         list.add(new ItemStack(item, 1, i));
                     }
                 }
-            }
-            else{
-                for(int i = 0; i < iface.getSubNames().length; i++){
+            } else {
+                for (int i = 0; i < iface.getSubNames().length; i++) {
                     list.add(new ItemStack(item, 1, i));
                 }
             }
-        }
-        else{
+        } else {
             list.add(new ItemStack(item, 1, 0));
         }
     }
@@ -137,20 +133,18 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     @Override
     @SuppressWarnings("deprecation")
     public float getBlockHardness(IBlockState state, World world, BlockPos pos) {
-        if(this instanceof IMetaBlock && this.hardness != null){
+        if (this instanceof IMetaBlock && this.hardness != null) {
             return this.hardness[this.getMetaFromState(state)];
-        }
-        else{
+        } else {
             return super.getBlockHardness(state, world, pos);
         }
     }
 
     @Override
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
-        if(this instanceof IMetaBlock && this.resistance != null){
+        if (this instanceof IMetaBlock && this.resistance != null) {
             return this.resistance[this.getMetaFromState(world.getBlockState(pos))];
-        }
-        else{
+        } else {
             return super.getExplosionResistance(world, pos, exploder, explosion);
         }
     }
@@ -158,10 +152,9 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     @Override
     @SuppressWarnings("deprecation")
     public Material getMaterial(IBlockState state) {
-        if(this instanceof IMetaBlock && this.material != null){
+        if (this instanceof IMetaBlock && this.material != null) {
             return this.material[this.getMetaFromState(state)];
-        }
-        else{
+        } else {
             return super.getMaterial(state);
         }
     }
@@ -173,25 +166,24 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        if(this instanceof IMetaBlock){
+        if (this instanceof IMetaBlock) {
             return new ItemStack(this, 1, this.getMetaFromState(state));
-        }
-        else{
+        } else {
             return super.getPickBlock(state, target, world, pos, player);
         }
     }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if(this instanceof IOrientableBlock){
-            IOrientableBlock iface = (IOrientableBlock)this;
+        if (this instanceof IOrientableBlock) {
+            IOrientableBlock iface = (IOrientableBlock) this;
 
-            if(iface.isOrientable(world, pos, placer)){
-                TileEntity tile = (TileEntity)world.getTileEntity(pos);
+            if (iface.isOrientable(world, pos, placer)) {
+                TileEntity tile = (TileEntity) world.getTileEntity(pos);
                 int orientation = MathHelper.floor_double(placer.rotationYaw * 4D / 360D + 0.5D) & 3;
 
-                if(tile != null && tile instanceof TileEntityBase){
-                    ((TileEntityBase)tile).setOrientation(EnumFacing.getHorizontal(orientation));
+                if (tile != null && tile instanceof TileEntityBase) {
+                    ((TileEntityBase) tile).setOrientation(EnumFacing.getHorizontal(orientation));
                 }
             }
         }
@@ -201,10 +193,9 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public MapColor getMapColor(IBlockState state) {
-        if(this instanceof IMetaBlock && this.mapColor != null){
+        if (this instanceof IMetaBlock && this.mapColor != null) {
             return this.mapColor[this.getMetaFromState(state)];
-        }
-        else{
+        } else {
             return super.getMapColor(state);
         }
     }
@@ -215,7 +206,7 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister registrar) {
-        if(this.textureName != null){
+        if (this.textureName != null) {
             this.texture = registrar.registerIcon(this.modid + ":blocks/" + this.textureName);
         }
     }
@@ -226,26 +217,48 @@ public class BlockBase<T extends TileEntity> extends Block implements ITileEntit
         return this.texture;
     }
 
-    public void setTextureName(String textureName){ this.textureName = textureName; }
+    public void setTextureName(String textureName) {
+        this.textureName = textureName;
+    }
 
-    public void setHardness(float[] hardness){ this.hardness = hardness; }
+    public void setHardness(float[] hardness) {
+        this.hardness = hardness;
+    }
 
-    public void setResistance(float[] resistance){ this.resistance = resistance; }
+    public void setResistance(float[] resistance) {
+        this.resistance = resistance;
+    }
 
-    public void setMaterial(Material[] material){ this.material = material; }
+    public void setMaterial(Material[] material) {
+        this.material = material;
+    }
 
-    public void setIsFullBlock(boolean isFullBlock){ this.isFullBlock = isFullBlock; }
+    public void setIsFullBlock(boolean isFullBlock) {
+        this.isFullBlock = isFullBlock;
+    }
 
-    public void setMapColor(MapColor[] mapColor){ this.mapColor = mapColor; }
+    public void setMapColor(MapColor[] mapColor) {
+        this.mapColor = mapColor;
+    }
 
-    public ItemBlock getItemBlock(){ return new ItemBlockBase(this); }
+    public ItemBlock getItemBlock() {
+        return new ItemBlockBase(this);
+    }
 
-    public Material[] getMaterial(){ return this.material; }
+    public Material[] getMaterial() {
+        return this.material;
+    }
 
-    public String getInternalName(){ return this.internalName; }
+    public String getInternalName() {
+        return this.internalName;
+    }
 
-    public CreativeTabs getCreativeTab(){ return CreativeTabs.SEARCH; }
+    public CreativeTabs getCreativeTab() {
+        return CreativeTabs.SEARCH;
+    }
 
-    public IBlockRenderingHandler getRenderingHandler(){ return new DefaultBlockRenderer(); }
+    public IBlockRenderingHandler getRenderingHandler() {
+        return new DefaultBlockRenderer();
+    }
 
 }

@@ -35,12 +35,12 @@ public class ClientProxy implements IVoidLibProxy {
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(IconRegister.INSTANCE);
 
-        for(BlockBase block : this.blocksToHandle){
+        for (BlockBase block : this.blocksToHandle) {
             IconRegister.INSTANCE.registerBlock(block);
             this.registerRenderingHandler(block, block.getRenderingHandler());
         }
 
-        for(ItemBase item : this.itemsToHandle){
+        for (ItemBase item : this.itemsToHandle) {
             IconRegister.INSTANCE.registerItem(item);
             this.registerRenderingHandler(item, item.getRenderingHandler());
         }
@@ -66,24 +66,24 @@ public class ClientProxy implements IVoidLibProxy {
         this.itemsToHandle.add(item);
     }
 
-    private void registerRenderingHandler(Block block, IBlockRenderingHandler renderer){
-        if(block == null || renderer == null){
+    private void registerRenderingHandler(Block block, IBlockRenderingHandler renderer) {
+        if (block == null || renderer == null) {
             throw new IllegalArgumentException("Block or rendering handler can't be null !");
         }
-        if(!(block instanceof BlockBase)){
+        if (!(block instanceof BlockBase)) {
             throw new IllegalArgumentException("Block must be an instance of BlockBase !");
         }
 
-        BlockBase blockBase = (BlockBase)block;
+        BlockBase blockBase = (BlockBase) block;
         ResourceLocation rl = new ResourceLocation(blockBase.getRegistryName().getResourceDomain(), blockBase.getInternalName());
 
-        if(blockBase instanceof IMetaBlock){
-            IMetaBlock iface = (IMetaBlock)blockBase;
+        if (blockBase instanceof IMetaBlock) {
+            IMetaBlock iface = (IMetaBlock) blockBase;
             CustomBlockRenderer blockRenderer = new CustomBlockRenderer(renderer);
             CustomItemRenderer itemRenderer = new CustomItemRenderer(renderer);
             ModelResourceLocation locationInventory = new ModelResourceLocation(rl, "inventory");
 
-            for(int i = 0; i < iface.getSubNames().length; i++){
+            for (int i = 0; i < iface.getSubNames().length; i++) {
                 ModelResourceLocation location = new ModelResourceLocation(rl, "type=" + iface.getSubNames()[i]);
                 ModelLoader.setCustomStateMapper(blockBase, new ClientUtils.SimpleStateMapper(location));
                 ModelRegistryHelper.register(location, blockRenderer);
@@ -91,8 +91,7 @@ public class ClientProxy implements IVoidLibProxy {
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockBase), 0, locationInventory);
             ModelRegistryHelper.registerItemRenderer(Item.getItemFromBlock(blockBase), itemRenderer);
-        }
-        else{
+        } else {
             CustomBlockRenderer blockRenderer = new CustomBlockRenderer(renderer);
             CustomItemRenderer itemRenderer = new CustomItemRenderer(renderer);
             ModelResourceLocation location = new ModelResourceLocation(rl, "normal");
@@ -104,28 +103,27 @@ public class ClientProxy implements IVoidLibProxy {
         }
     }
 
-    private void registerRenderingHandler(Item item, IItemRenderingHandler renderer){
-        if(item == null || renderer == null){
+    private void registerRenderingHandler(Item item, IItemRenderingHandler renderer) {
+        if (item == null || renderer == null) {
             throw new IllegalArgumentException("Item or rendering handler can't be null !");
         }
-        if(!(item instanceof ItemBase)){
+        if (!(item instanceof ItemBase)) {
             throw new IllegalArgumentException("Item must be an instance of ItemBase !");
         }
 
-        ItemBase itemBase = (ItemBase)item;
+        ItemBase itemBase = (ItemBase) item;
         ResourceLocation rl = new ResourceLocation(itemBase.getRegistryName().getResourceDomain(), itemBase.getInternalName());
 
-        if(itemBase.getSubNames() != null){
+        if (itemBase.getSubNames() != null) {
             CustomItemRenderer itemRenderer = new CustomItemRenderer(renderer);
             ModelResourceLocation location = new ModelResourceLocation(rl, "inventory");
 
-            for(int i = 0; i < itemBase.getSubNames().length; i++){
+            for (int i = 0; i < itemBase.getSubNames().length; i++) {
                 ModelLoader.setCustomModelResourceLocation(itemBase, 0, location);
             }
 
             ModelRegistryHelper.registerItemRenderer(itemBase, itemRenderer);
-        }
-        else{
+        } else {
             CustomItemRenderer itemRenderer = new CustomItemRenderer(renderer);
             ModelResourceLocation location = new ModelResourceLocation(rl, "inventory");
             ModelLoader.setCustomModelResourceLocation(itemBase, 0, location);

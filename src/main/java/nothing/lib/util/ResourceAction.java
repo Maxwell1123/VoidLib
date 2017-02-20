@@ -10,28 +10,27 @@ public class ResourceAction {
 
     private ResourceLocation location;
 
-    public ResourceAction(ResourceLocation location){
+    public ResourceAction(ResourceLocation location) {
         this.location = location;
     }
 
-    public ResourceAction(String path){
+    public ResourceAction(String path) {
         this.location = new ResourceLocation(path);
     }
 
-    public ResourceAction(String modid, String path){
+    public ResourceAction(String modid, String path) {
         this.location = new ResourceLocation(modid, path);
     }
 
-    public void bind(boolean useManager){
-        if(useManager){
+    public void bind(boolean useManager) {
+        if (useManager) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(this.location);
-        }
-        else{
+        } else {
             Minecraft.getMinecraft().renderEngine.bindTexture(this.location);
         }
     }
 
-    public ResourceLocation getLocation(){
+    public ResourceLocation getLocation() {
         return this.location;
     }
 

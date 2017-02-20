@@ -16,25 +16,25 @@ import java.nio.FloatBuffer;
  */
 public class FontHelper {
 
-    public static void drawString(String text, int posX, int posY, TrueTypeFont font, float scaleX, float scaleY, ColourRGBA color){
-        float r = (float)(color.r / 255F);
-        float g = (float)(color.g / 255F);
-        float b = (float)(color.b / 255F);
-        float a = (float)(color.a / 255F);
+    public static void drawString(String text, int posX, int posY, TrueTypeFont font, float scaleX, float scaleY, ColourRGBA color) {
+        float r = (float) (color.r / 255F);
+        float g = (float) (color.g / 255F);
+        float b = (float) (color.b / 255F);
+        float a = (float) (color.a / 255F);
         drawString(text, posX, posY, font, scaleX, scaleY, new float[]{r, g, b, a});
     }
 
-    public static void drawString(String text, int posX, int posY, TrueTypeFont font, float scaleX, float scaleY, float... rgba){
+    public static void drawString(String text, int posX, int posY, TrueTypeFont font, float scaleX, float scaleY, float... rgba) {
         Minecraft mc = Minecraft.getMinecraft();
         ScaledResolution sr = new ScaledResolution(mc);
 
-        if(mc.gameSettings.hideGUI){
+        if (mc.gameSettings.hideGUI) {
             return;
         }
 
         int amt = 1;
 
-        if(sr.getScaleFactor() == 1){
+        if (sr.getScaleFactor() == 1) {
             amt = 2;
         }
 
@@ -43,7 +43,7 @@ public class FontHelper {
         Matrix4f matrix = new Matrix4f();
         matrix.load(matrixData);
         FontHelper.set2DMode();
-        posY = mc.displayHeight-(posY * sr.getScaleFactor()) - (((font.getLineHeight() / amt)));
+        posY = mc.displayHeight - (posY * sr.getScaleFactor()) - (((font.getLineHeight() / amt)));
         GL11.glEnable(GL11.GL_BLEND);
         font.drawString(posX * sr.getScaleFactor(), posY - matrix.m31 * sr.getScaleFactor(), text, scaleX / amt, scaleY / amt, rgba);
         GL11.glDisable(GL11.GL_BLEND);

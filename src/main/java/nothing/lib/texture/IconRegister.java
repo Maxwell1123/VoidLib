@@ -20,8 +20,8 @@ public class IconRegister implements IIconRegister {
     private Map<String, TextureAtlasSprite> iconMap = Maps.newHashMap();
 
     @Override
-    public TextureAtlasSprite registerIcon(String path){
-        if(!this.locationMap.containsKey(path)){
+    public TextureAtlasSprite registerIcon(String path) {
+        if (!this.locationMap.containsKey(path)) {
             this.locationMap.put(path, new ResourceLocation(path));
         }
 
@@ -29,40 +29,40 @@ public class IconRegister implements IIconRegister {
     }
 
     @SubscribeEvent
-    public void onTextureStitchPre(TextureStitchEvent.Pre event){
-        for(IIconBlock block : this.blocksToRegister){
+    public void onTextureStitchPre(TextureStitchEvent.Pre event) {
+        for (IIconBlock block : this.blocksToRegister) {
             block.registerBlockIcons(INSTANCE);
         }
 
-        for(IIconItem item : this.itemsToRegister){
+        for (IIconItem item : this.itemsToRegister) {
             item.registerIcons(INSTANCE);
         }
 
-        for(Map.Entry<String, ResourceLocation> entry : this.locationMap.entrySet()){
+        for (Map.Entry<String, ResourceLocation> entry : this.locationMap.entrySet()) {
             TextureAtlasSprite icon = event.getMap().registerSprite(entry.getValue());
             this.iconMap.put(entry.getKey(), icon);
         }
     }
 
     @SubscribeEvent
-    public void onModelBake(ModelBakeEvent event){
-        for(IIconBlock block : this.blocksToRegister){
+    public void onModelBake(ModelBakeEvent event) {
+        for (IIconBlock block : this.blocksToRegister) {
             block.registerBlockIcons(INSTANCE);
         }
 
-        for(IIconItem item : this.itemsToRegister){
+        for (IIconItem item : this.itemsToRegister) {
             item.registerIcons(INSTANCE);
         }
     }
 
-    public void registerBlock(IIconBlock block){
-        if(block != null){
+    public void registerBlock(IIconBlock block) {
+        if (block != null) {
             this.blocksToRegister.add(block);
         }
     }
 
-    public void registerItem(IIconItem item){
-        if(item != null){
+    public void registerItem(IIconItem item) {
+        if (item != null) {
             this.itemsToRegister.add(item);
         }
     }

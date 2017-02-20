@@ -21,17 +21,17 @@ public class VoidLib {
     public static Logger LOGGER = LogManager.getLogger(NAME);
 
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event){
+    public void preInit(FMLPreInitializationEvent event) {
         PROXY.preInit(event);
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event){
+    public void init(FMLInitializationEvent event) {
         PROXY.init(event);
     }
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event){
+    public void postInit(FMLPostInitializationEvent event) {
         PROXY.postInit(event);
     }
 

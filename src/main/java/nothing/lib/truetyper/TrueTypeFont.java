@@ -48,25 +48,25 @@ public class TrueTypeFont {
 
     public TrueTypeFont(Font font, boolean antiAlias, char[] additionalChars) {
         this.font = font;
-        this.fontSize = font.getSize()+3;
+        this.fontSize = font.getSize() + 3;
         this.antiAlias = antiAlias;
-        createSet( additionalChars );
+        createSet(additionalChars);
         fontHeight -= 1;
 
-        if (fontHeight <= 0){
+        if (fontHeight <= 0) {
             fontHeight = 1;
         }
     }
 
     public TrueTypeFont(Font font, boolean antiAlias) {
-        this(font, antiAlias, null );
+        this(font, antiAlias, null);
     }
+
     public void setCorrection(boolean on) {
-        if(on) {
+        if (on) {
             correctL = 2;
             correctR = 1;
-        }
-        else {
+        } else {
             correctL = 0;
             correctR = 0;
         }
@@ -82,13 +82,13 @@ public class TrueTypeFont {
 
         g.setFont(font);
         fontMetrics = g.getFontMetrics();
-        int charwidth = fontMetrics.charWidth(ch)+8;
+        int charwidth = fontMetrics.charWidth(ch) + 8;
 
         if (charwidth <= 0) {
             charwidth = 7;
         }
 
-        int charheight = fontMetrics.getHeight()+3;
+        int charheight = fontMetrics.getHeight() + 3;
 
         if (charheight <= 0) {
             charheight = fontSize;
@@ -111,23 +111,23 @@ public class TrueTypeFont {
 
     }
 
-    private void createSet( char[] customCharsArray ) {
-        if(customCharsArray != null && customCharsArray.length > 0) {
+    private void createSet(char[] customCharsArray) {
+        if (customCharsArray != null && customCharsArray.length > 0) {
             textureWidth *= 2;
         }
 
         try {
             BufferedImage imgTemp = new BufferedImage(textureWidth, textureHeight, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g = (Graphics2D) imgTemp.getGraphics();
-            g.setColor(new Color(0,0,0,1));
-            g.fillRect(0,0,textureWidth,textureHeight);
+            g.setColor(new Color(0, 0, 0, 1));
+            g.fillRect(0, 0, textureWidth, textureHeight);
             int rowHeight = 0;
             int positionX = 0;
             int positionY = 0;
-            int customCharsLength = ( customCharsArray != null ) ? customCharsArray.length : 0;
+            int customCharsLength = (customCharsArray != null) ? customCharsArray.length : 0;
 
             for (int i = 0; i < 256 + customCharsLength; i++) {
-                char ch = ( i < 256 ) ? (char) i : customCharsArray[i-256];
+                char ch = (i < 256) ? (char) i : customCharsArray[i - 256];
                 BufferedImage fontImage = getFontImage(ch);
                 IntObject newIntObject = new IntObject();
                 newIntObject.width = fontImage.getWidth();
@@ -142,30 +142,28 @@ public class TrueTypeFont {
                 newIntObject.storedX = positionX;
                 newIntObject.storedY = positionY;
 
-                if(newIntObject.height > fontHeight) {
+                if (newIntObject.height > fontHeight) {
                     fontHeight = newIntObject.height;
                 }
 
-                if(newIntObject.height > rowHeight) {
+                if (newIntObject.height > rowHeight) {
                     rowHeight = newIntObject.height;
                 }
 
                 g.drawImage(fontImage, positionX, positionY, null);
                 positionX += newIntObject.width;
 
-                if(i < 256 ){
+                if (i < 256) {
                     charArray[i] = newIntObject;
-                }
-                else {
-                    customChars.put( new Character( ch ), newIntObject );
+                } else {
+                    customChars.put(new Character(ch), newIntObject);
                 }
 
                 fontImage = null;
             }
 
             fontTextureID = loadImage(imgTemp);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Failed to create font.");
             e.printStackTrace();
         }
@@ -174,16 +172,16 @@ public class TrueTypeFont {
     private void drawQuad(float drawX, float drawY, float drawX2, float drawY2, float srcX, float srcY, float srcX2, float srcY2, float[] rgba) {
         float DrawWidth = drawX2 - drawX;
         float DrawHeight = drawY2 - drawY;
-        float TextureSrcX= srcX / textureWidth;
+        float TextureSrcX = srcX / textureWidth;
         float TextureSrcY = srcY / textureHeight;
         float SrcWidth = srcX2 - srcX;
         float SrcHeight = srcY2 - srcY;
         float RenderWidth = (SrcWidth / textureWidth);
         float RenderHeight = (SrcHeight / textureHeight);
-        int colorR = (int)(rgba[0] * 255);
-        int colorG = (int)(rgba[1] * 255);
-        int colorB = (int)(rgba[2] * 255);
-        int colorA = (int)(rgba[3] * 255);
+        int colorR = (int) (rgba[0] * 255);
+        int colorG = (int) (rgba[1] * 255);
+        int colorB = (int) (rgba[2] * 255);
+        int colorA = (int) (rgba[3] * 255);
         Tessellator tess = Tessellator.getInstance();
         VertexBuffer buffer = tess.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -205,13 +203,12 @@ public class TrueTypeFont {
 
             if (currentChar < 256) {
                 intObject = charArray[currentChar];
-            }
-            else {
-                intObject = (IntObject)customChars.get( new Character( (char) currentChar ) );
+            } else {
+                intObject = (IntObject) customChars.get(new Character((char) currentChar));
             }
 
-            if( intObject != null ){
-                totalwidth += intObject.width/4;
+            if (intObject != null) {
+                totalwidth += intObject.width / 4;
                 lastWidth = intObject.width;
             }
         }
@@ -232,15 +229,16 @@ public class TrueTypeFont {
     }
 
     public void drawString(float x, float y, String whatchars, float scaleX, float scaleY, float... rgba) {
-        drawString(x,y,whatchars, 0, whatchars.length()-1, scaleX, scaleY, ALIGN_LEFT, rgba);
+        drawString(x, y, whatchars, 0, whatchars.length() - 1, scaleX, scaleY, ALIGN_LEFT, rgba);
     }
+
     public void drawString(float x, float y, String whatchars, float scaleX, float scaleY, int format, float... rgba) {
-        drawString(x,y,whatchars, 0, whatchars.length()-1, scaleX, scaleY, format, rgba);
+        drawString(x, y, whatchars, 0, whatchars.length() - 1, scaleX, scaleY, format, rgba);
     }
 
     public void drawString(float x, float y, String whatchars, int startIndex, int endIndex, float scaleX, float scaleY, int format, float... rgba) {
         GL11.glPushMatrix();
-        GL11.glScalef (scaleX, scaleY, 1.0f);
+        GL11.glScalef(scaleX, scaleY, 1.0f);
         IntObject intObject = null;
         int charCurrent;
         float totalwidth = 0;
@@ -253,7 +251,7 @@ public class TrueTypeFont {
                 c = correctR;
 
                 while (i < endIndex) {
-                    if(whatchars.charAt(i) == '\n'){
+                    if (whatchars.charAt(i) == '\n') {
                         startY -= fontHeight;
                     }
 
@@ -266,18 +264,17 @@ public class TrueTypeFont {
                 for (int l = startIndex; l <= endIndex; l++) {
                     charCurrent = whatchars.charAt(l);
 
-                    if (charCurrent == '\n'){
+                    if (charCurrent == '\n') {
                         break;
                     }
 
                     if (charCurrent < 256) {
                         intObject = charArray[charCurrent];
-                    }
-                    else {
-                        intObject = (IntObject)customChars.get( new Character( (char) charCurrent ) );
+                    } else {
+                        intObject = (IntObject) customChars.get(new Character((char) charCurrent));
                     }
 
-                    totalwidth += intObject.width-correctL;
+                    totalwidth += intObject.width - correctL;
                 }
 
                 totalwidth /= -2;
@@ -296,44 +293,41 @@ public class TrueTypeFont {
         while (i >= startIndex && i <= endIndex) {
             charCurrent = whatchars.charAt(i);
 
-            if(charCurrent < 256) {
+            if (charCurrent < 256) {
                 intObject = charArray[charCurrent];
-            }
-            else{
-                intObject = (IntObject)customChars.get( new Character( (char) charCurrent ) );
+            } else {
+                intObject = (IntObject) customChars.get(new Character((char) charCurrent));
             }
 
-            if(intObject != null ) {
-                if (d < 0){
-                    totalwidth += (intObject.width-c) * d;
+            if (intObject != null) {
+                if (d < 0) {
+                    totalwidth += (intObject.width - c) * d;
                 }
 
-                if (charCurrent == '\n'){
+                if (charCurrent == '\n') {
                     startY -= fontHeight * d;
                     totalwidth = 0;
 
-                    if(format == ALIGN_CENTER) {
-                        for(int l = i+1; l <= endIndex; l++) {
+                    if (format == ALIGN_CENTER) {
+                        for (int l = i + 1; l <= endIndex; l++) {
                             charCurrent = whatchars.charAt(l);
 
-                            if (charCurrent == '\n'){
+                            if (charCurrent == '\n') {
                                 break;
                             }
 
                             if (charCurrent < 256) {
                                 intObject = charArray[charCurrent];
-                            }
-                            else {
-                                intObject = (IntObject)customChars.get( new Character( (char) charCurrent ) );
+                            } else {
+                                intObject = (IntObject) customChars.get(new Character((char) charCurrent));
                             }
 
-                            totalwidth += intObject.width-correctL;
+                            totalwidth += intObject.width - correctL;
                         }
 
                         totalwidth /= -2;
                     }
-                }
-                else {
+                } else {
                     drawQuad((totalwidth + intObject.width) + x / scaleX,
                             startY + y / scaleY,
                             totalwidth + x / scaleX,
@@ -345,8 +339,8 @@ public class TrueTypeFont {
                             rgba
                     );
 
-                    if (d > 0){
-                        totalwidth += (intObject.width-c) * d ;
+                    if (d > 0) {
+                        totalwidth += (intObject.width - c) * d;
                     }
                 }
 
@@ -359,34 +353,33 @@ public class TrueTypeFont {
 
     public static int loadImage(BufferedImage bufferedImage) {
         try {
-            short width = (short)bufferedImage.getWidth();
-            short height = (short)bufferedImage.getHeight();
-            int bpp = (byte)bufferedImage.getColorModel().getPixelSize();
+            short width = (short) bufferedImage.getWidth();
+            short height = (short) bufferedImage.getHeight();
+            int bpp = (byte) bufferedImage.getColorModel().getPixelSize();
             ByteBuffer byteBuffer;
             DataBuffer db = bufferedImage.getData().getDataBuffer();
 
             if (db instanceof DataBufferInt) {
-                int intI[] = ((DataBufferInt)(bufferedImage.getData().getDataBuffer())).getData();
+                int intI[] = ((DataBufferInt) (bufferedImage.getData().getDataBuffer())).getData();
                 byte newI[] = new byte[intI.length * 4];
 
-                for (int i = 0; i < intI.length; i++){
+                for (int i = 0; i < intI.length; i++) {
                     byte b[] = intToByteArray(intI[i]);
                     int newIndex = i * 4;
                     newI[newIndex] = b[1];
-                    newI[newIndex+1] = b[2];
-                    newI[newIndex+2] = b[3];
-                    newI[newIndex+3] = b[0];
+                    newI[newIndex + 1] = b[2];
+                    newI[newIndex + 2] = b[3];
+                    newI[newIndex + 3] = b[0];
                 }
 
                 byteBuffer = ByteBuffer.allocateDirect(width * height * (bpp / 8)).order(ByteOrder.nativeOrder()).put(newI);
-            }
-            else {
-                byteBuffer = ByteBuffer.allocateDirect(width * height * (bpp / 8)).order(ByteOrder.nativeOrder()).put(((DataBufferByte)(bufferedImage.getData().getDataBuffer())).getData());
+            } else {
+                byteBuffer = ByteBuffer.allocateDirect(width * height * (bpp / 8)).order(ByteOrder.nativeOrder()).put(((DataBufferByte) (bufferedImage.getData().getDataBuffer())).getData());
             }
 
             byteBuffer.flip();
             int internalFormat = GL11.GL_RGBA8, format = GL11.GL_RGBA;
-            IntBuffer textureId =  BufferUtils.createIntBuffer(1);
+            IntBuffer textureId = BufferUtils.createIntBuffer(1);
             GL11.glGenTextures(textureId);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId.get(0));
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
@@ -402,33 +395,35 @@ public class TrueTypeFont {
             GLU.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, internalFormat, width, height, format, GL11.GL_UNSIGNED_BYTE, byteBuffer);
             return textureId.get(0);
 
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return -1;
     }
+
     public static boolean isSupported(String fontname) {
         Font font[] = getFonts();
 
-        for(int i = font.length-1; i >= 0; i--){
-            if(font[i].getName().equalsIgnoreCase(fontname)) {
+        for (int i = font.length - 1; i >= 0; i--) {
+            if (font[i].getName().equalsIgnoreCase(fontname)) {
                 return true;
             }
         }
 
         return false;
     }
+
     public static Font[] getFonts() {
         return GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
     }
+
     public static byte[] intToByteArray(int value) {
         return new byte[]{
-                (byte)(value >>> 24),
-                (byte)(value >>> 16),
-                (byte)(value >>> 8),
-                (byte)value
+                (byte) (value >>> 24),
+                (byte) (value >>> 16),
+                (byte) (value >>> 8),
+                (byte) value
         };
     }
 

@@ -22,10 +22,10 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
         CCModel model = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
         int meta = state.getBlock().getMetaFromState(state);
 
-        for(int i = 0; i < 6; i++){
-            TextureAtlasSprite texture = ((IIconBlock)state.getBlock()).getIcon(meta, i);
+        for (int i = 0; i < 6; i++) {
+            TextureAtlasSprite texture = ((IIconBlock) state.getBlock()).getIcon(meta, i);
 
-            if(texture != null){
+            if (texture != null) {
                 model.render(renderState, 0 + (4 * i), 4 + (4 * i), new IconTransformation(texture));
             }
         }
@@ -36,10 +36,10 @@ public class DefaultBlockRenderer implements IBlockRenderingHandler {
         CCModel model = CCModel.quadModel(24).generateBlock(0, new Cuboid6(0D, 0D, 0D, 1D, 1D, 1D)).computeNormals();
         int meta = stack.getMetadata();
 
-        for(int i = 0; i < 6; i++){
-            TextureAtlasSprite texture = ((IIconBlock)Block.getBlockFromItem(stack.getItem())).getIcon(meta, i);
+        for (int i = 0; i < 6; i++) {
+            TextureAtlasSprite texture = ((IIconBlock) Block.getBlockFromItem(stack.getItem())).getIcon(meta, i);
 
-            if(texture != null){
+            if (texture != null) {
                 model.render(renderState, 0 + (4 * i), 4 + (4 * i), new IconTransformation(texture));
             }
         }

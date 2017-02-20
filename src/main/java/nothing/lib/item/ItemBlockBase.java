@@ -22,10 +22,10 @@ public class ItemBlockBase extends ItemBlock {
     public ItemBlockBase(Block block) {
         super(block);
 
-        if(block instanceof BlockBase){
-            BlockBase blockBase = (BlockBase)block;
+        if (block instanceof BlockBase) {
+            BlockBase blockBase = (BlockBase) block;
 
-            if(blockBase instanceof IMetaBlock){
+            if (blockBase instanceof IMetaBlock) {
                 this.setHasSubtypes(true);
             }
         }
@@ -33,17 +33,15 @@ public class ItemBlockBase extends ItemBlock {
 
     @Override
     public int getMetadata(int damage) {
-        if(this.block instanceof BlockBase){
-            BlockBase blockBase = (BlockBase)this.block;
+        if (this.block instanceof BlockBase) {
+            BlockBase blockBase = (BlockBase) this.block;
 
-            if(blockBase instanceof IMetaBlock){
+            if (blockBase instanceof IMetaBlock) {
                 return damage;
-            }
-            else{
+            } else {
                 return super.getMetadata(damage);
             }
-        }
-        else{
+        } else {
             return super.getMetadata(damage);
         }
     }
@@ -56,25 +54,22 @@ public class ItemBlockBase extends ItemBlock {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getUnlocalizedName(ItemStack stack){
-        if(this.block instanceof BlockBase){
-            BlockBase blockBase = (BlockBase)this.block;
+    public String getUnlocalizedName(ItemStack stack) {
+        if (this.block instanceof BlockBase) {
+            BlockBase blockBase = (BlockBase) this.block;
 
-            if(blockBase instanceof ICustomLocalization){
-                ICustomLocalization iface = (ICustomLocalization)blockBase;
+            if (blockBase instanceof ICustomLocalization) {
+                ICustomLocalization iface = (ICustomLocalization) blockBase;
                 return iface.getUnlocalizedNameCustom();
-            }
-            else{
-                if(blockBase instanceof IMetaBlock){
-                    IMetaBlock iface = (IMetaBlock)blockBase;
+            } else {
+                if (blockBase instanceof IMetaBlock) {
+                    IMetaBlock iface = (IMetaBlock) blockBase;
                     return this.getUnlocalizedName() + "." + iface.getSubNames()[stack.getMetadata()];
-                }
-                else{
+                } else {
                     return this.getUnlocalizedName();
                 }
             }
-        }
-        else{
+        } else {
             return this.getUnlocalizedName();
         }
     }
@@ -82,13 +77,12 @@ public class ItemBlockBase extends ItemBlock {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-        if(this.block instanceof IShiftDescription){
-            IShiftDescription iface = (IShiftDescription)this.block;
+        if (this.block instanceof IShiftDescription) {
+            IShiftDescription iface = (IShiftDescription) this.block;
 
-            if(CommonUtils.isShiftPressed()){
+            if (CommonUtils.isShiftPressed()) {
                 iface.addDescription(stack, player, tooltip);
-            }
-            else{
+            } else {
                 tooltip.add(LanguageUtils.PRESS_KEY + " " + LanguageUtils.KEY_SHIFT + " " + LanguageUtils.SHOW_INFO);
             }
         }
